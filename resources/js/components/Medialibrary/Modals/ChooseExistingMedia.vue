@@ -8,7 +8,8 @@
       <ModalContent>
         <IndexSearchInput
             class="mb-2"
-            @update:keyword="applyFilter"
+            :searchable="true"
+            v-model="search"
         />
 
         <LoadingView :loading="loading">
@@ -45,6 +46,7 @@
 </template>
 
 <script>
+import debounce from 'lodash/debounce'
 import { Button } from 'laravel-nova-ui'
 import PaginationButton from '../PaginationButton'
 import ChooseExistingMediaList from '../ChooseExistingMediaList'
@@ -81,6 +83,7 @@ export default {
       loading: false,
       media: [],
       chosenMedia: [],
+      search: '',
       params: {
         name: '',
         mimeType: this.field.accept || '',
@@ -101,6 +104,13 @@ export default {
   },
 
   created() {
+    const debouncer = debounce(callback => callback(), 500)
+
+    this.$watch('search', newValue => {
+      this.search = newValue
+      debouncer(() => this.applyFilter(newValue))
+    })
+
     this.getResources(this.params)
   },
 
