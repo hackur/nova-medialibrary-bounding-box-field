@@ -3,6 +3,11 @@ import DetailField from './components/MedialibraryDetailField'
 import FormField from './components/MedialibraryFormField'
 import GeneratedConversionsDetailField from './components/GeneratedConversionsDetailField'
 
+// BoundingBox components
+import BoundingBoxIndexField from './components/BoundingBox/IndexField'
+import BoundingBoxDetailField from './components/BoundingBox/DetailField'
+import BoundingBoxFormField from './components/BoundingBox/FormField'
+
 import IconCrop from './components/Icons/Crop'
 import IconLink from './components/Icons/Link'
 
@@ -37,4 +42,9 @@ Nova.booting((app, store) => {
   app.component('form-nova-medialibrary-field', FormField)
 
   app.component('detail-nova-generated-conversions-field', GeneratedConversionsDetailField)
+
+  // BoundingBox field components
+  app.component('index-bounding-box-field', BoundingBoxIndexField)
+  app.component('detail-bounding-box-field', BoundingBoxDetailField)
+  app.component('form-bounding-box-field', BoundingBoxFormField)
 })

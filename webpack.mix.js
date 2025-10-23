@@ -1,13 +1,22 @@
 let mix = require('laravel-mix')
-let NovaExtension = require('laravel-nova-devtool')
-
-mix.extend('nova', new NovaExtension())
 
 mix
   .setPublicPath('dist')
   .js('resources/js/field.js', 'js')
   .vue({ version: 3 })
   .sass('resources/sass/field.scss', 'css')
-  .nova('dmitrybubyakin/nova-medialibrary-field')
+  .webpackConfig({
+    externals: {
+      vue: 'Vue',
+      'laravel-nova': 'LaravelNova',
+      'laravel-nova-ui': 'LaravelNovaUi',
+      clipboard: 'Clipboard',
+      vuedraggable: 'vuedraggable',
+      'vue-cropperjs': 'VueCropperjs',
+      cropperjs: 'Cropper',
+    },
+    output: {
+      uniqueName: 'pcrcard/nova-medialibrary-bounding-box-field',
+    },
+  })
   .version()
-  // .sourceMaps()

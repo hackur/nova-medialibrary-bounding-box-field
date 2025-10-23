@@ -89,7 +89,8 @@ import { Button } from 'laravel-nova-ui'
 import VueCropper from 'vue-cropperjs'
 import { PreventsModalAbandonment } from 'laravel-nova'
 
-import 'cropperjs/dist/cropper.css'
+// Note: cropperjs v2+ no longer ships with CSS - styles are embedded or provided by Nova
+// import 'cropperjs/dist/cropper.css'
 
 export default {
   components: {

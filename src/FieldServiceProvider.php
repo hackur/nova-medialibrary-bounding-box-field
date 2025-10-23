@@ -35,7 +35,7 @@ class FieldServiceProvider extends ServiceProvider
     private function publishNovaResources(): void
     {
         Nova::serving(function (ServingNova $event): void {
-            Nova::mix('nova-medialibrary-field', __DIR__.'/../dist/mix-manifest.json');
+            Nova::mix('nova-medialibrary-bounding-box-field', __DIR__.'/../dist/mix-manifest.json');
 
             Media::$model = config('media-library.media_model');
 
@@ -50,7 +50,7 @@ class FieldServiceProvider extends ServiceProvider
         }
 
         Route::middleware(['nova'])
-            ->prefix('nova-vendor/dmitrybubyakin/nova-medialibrary-field')
+            ->prefix('nova-vendor/pcrcard/nova-medialibrary-bounding-box-field')
             ->group(__DIR__ . '/../routes/api.php');
     }
 

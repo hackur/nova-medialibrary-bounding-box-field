@@ -1,92 +1,197 @@
-# Medialibrary Field for Laravel Nova
+# Laravel Nova MediaLibrary Bounding Box Field
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/dmitrybubyakin/nova-medialibrary-field.svg?style=flat-square)](https://github.com/dmitrybubyakin/nova-medialibrary-field/releases)
-[![Total Downloads](https://img.shields.io/packagist/dt/dmitrybubyakin/nova-medialibrary-field.svg?style=flat-square)](https://packagist.org/packages/dmitrybubyakin/nova-medialibrary-field)
+A comprehensive Laravel Nova field package that combines [Spatie's MediaLibrary](https://spatie.be/docs/laravel-medialibrary) management with interactive bounding box editing capabilities for visual annotation and damage assessment workflows.
 
-Laravel Nova field for managing the Spatie media library.
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE.md)
 
-This is the documentation for v2 and v3. For v1 follow this [link](https://github.com/dmitrybubyakin/nova-medialibrary-field/tree/1.2.2)
+## Features
 
-Features:
- - add media on update/create views
- - add existing media
- - crop media
- - sort media
- - display on the index view
+### 📦 Dual Functionality
+- **MediaLibrary Field** - Complete media upload, management, and cropping via `Medialibrary` field
+- **BoundingBox Field** - Interactive canvas-based visual annotation via `BoundingBoxField`
+
+### 🎨 Bounding Box Editor (NEW in v2.0)
+- **Interactive Drawing** - Click and drag to create rectangular annotations on images
+- **Multi-Box Support** - Add multiple annotations to single images
+- **Damage Types** - 15 predefined damage types with color coding and icons
+- **Severity Levels** - 3 severity classifications (minor, moderate, severe)
+- **Annotation Notes** - Add custom notes to each bounding box
+- **Read-Only Mode** - Display annotations without editing capability
+- **Addressed Mode** - Toggle between all damage and addressed-only views
+
+### 🖼️ MediaLibrary Management
+- Drag and drop file uploads
+- Image cropping and editing
+- Multiple file support
+- Conversion generation
+- Custom properties
+- Download and preview
 
 ## Table of Contents
 
- - [Screenshots](#screenshots)
- - [Installation](#installation)
- - [Usage](#usage)
-    - [Methods](#methods)
-        - [Attribute](#attribute)
-        - [Fields](#fields)
-        - [AttachUsing](#attachusing)
-        - [ResolveMediaUsing](#resolvemediausing)
-        - [AttachExisting](#attachexisting)
-        - [MediaOnIndex](#mediaonindex)
-        - [DownloadUsing](#downloadusing)
-        - [PreviewUsing](#previewusing)
-        - [Tooltip](#tooltip)
-        - [Title](#title)
-        - [CopyAs](#copyAs)
-        - [Croppable](#croppable)
-        - [Single](#single)
-        - [Accept](#accept)
-        - [MaxSizeInBytes](#maxsizeinbytes)
-        - [AttachOnDetails](#attachondetails)
-        - [AttachRules](#attachrules)
-        - [Autouploading](#autouploading)
-    - [Preview Customization](#preview-customization)
-    - [Validation](#validation)
-    - [Sorting](#sorting)
-    - [Authorization Gates 'view', 'update' and 'delete'](#authorization-gates-view-update-and-delete)
- - [Translations](#translations)
- - [Changelog](#changelog)
- - [Alternatives](#alternatives)
- - [License](#license)
-
-## Screenshots
-
-![index view](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/index.png)
-![create view](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/create.png)
-![details view](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/details.png)
-![update view](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/update.png)
-![media actions](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/actions.png)
-![media crop dialog](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/crop-dialog.png)
-![media details dialog](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/media-details-dialog.png)
-![existing media dialog](https://raw.githubusercontent.com/dmitrybubyakin/nova-medialibrary-field/master/docs/existing-media-dialog.png)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [BoundingBox Field Usage](#boundingbox-field-usage)
+- [MediaLibrary Field Usage](#medialibrary-field-usage)
+- [API Reference](#api-reference)
+- [Data Structure](#data-structure)
+- [Model Setup](#model-setup)
+- [Development](#development)
+- [Troubleshooting](#troubleshooting)
 
 ## Installation
 
-This package can be installed via command:
+### 1. Add Package Repository
+
+This package is installed as a local VCS repository. It's already configured in PCR Card's `composer.json`:
+
+```json
+{
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./packages/nova-medialibrary-bounding-box-field",
+            "options": {
+                "symlink": true
+            }
+        }
+    ]
+}
+```
+
+### 2. Require Package
 
 ```bash
-composer require dmitrybubyakin/nova-medialibrary-field
+composer require pcrcard/nova-medialibrary-bounding-box-field
 ```
 
-## Usage
+### 3. Build Assets (if modifying package)
+
+```bash
+cd packages/nova-medialibrary-bounding-box-field
+npm install
+npm run prod
+```
+
+### 4. Clear Caches
+
+```bash
+php artisan cache:clear
+php artisan config:clear
+php artisan view:clear
+```
+
+## Quick Start
+
+### Basic Bounding Box Field
 
 ```php
-Medialibrary::make($name, $collectionName = '', $diskName = '', $attribute = null),
+use DmitryBubyakin\NovaMedialibraryField\Fields\BoundingBoxField;
+
+BoundingBoxField::make('Damage Assessment', 'bounding_boxes')
+    ->image(fn() => $this->submissionImage?->file_url)
+    ->readonly(false)
+    ->help('Click and drag to mark damage areas');
 ```
 
-### Methods
-
-#### Attribute
-
-Sometimes you may need to use the same field label (duplicated sections, etc). The attribute must be unique. In this case you can change the default behaviour using the `attribute()` method.
+### Basic MediaLibrary Field
 
 ```php
-Medialibrary::make('name', 'collection name', 'disk name', 'custom_attribute');
-// or
-Medialibrary::make('name', 'collection name', 'disk name')->attribute('custom_attribute');
+use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
+
+Medialibrary::make('Images', 'images')
+    ->conversionOnView('thumb')
+    ->croppable()
+    ->multiple()
+    ->rules('required');
 ```
 
-#### Fields
+## BoundingBox Field Usage
 
-Define custom fields for media. [MediaFields](src/Fields/Support/MediaFields.php) is used by default.
+### Simple Read-Only Display
+
+Display existing damage assessments without editing:
+
+```php
+BoundingBoxField::make('Damage Areas', 'bounding_boxes')
+    ->image(fn() => $this->frontImage?->url)
+    ->damageAssessments(fn() => $this->damageAssessments)
+    ->readonly(true)
+    ->help('View marked damage areas');
+```
+
+### Interactive Editor with Existing Data
+
+Allow drawing new boxes while showing existing assessments:
+
+```php
+BoundingBoxField::make('Visual Damage Editor', 'bounding_boxes')
+    ->image(function () {
+        return $this->submissionImage?->file_url;
+    })
+    ->damageAssessments(function () {
+        // Load related damage assessment models
+        return $this->damageAssessments;
+    })
+    ->readonly(false)
+    ->addressedMode(false)
+    ->help('Draw bounding boxes to mark damaged areas')
+    ->onlyOnForms();
+```
+
+### Multiple Images (Front/Back Cards)
+
+Handle cards with front and back images:
+
+```php
+// Front image assessment
+BoundingBoxField::make('Front Damage', 'front_bounding_boxes')
+    ->image(fn() => $this->frontImage?->url)
+    ->damageAssessments(fn() => $this->frontDamageAssessments)
+    ->readonly(false)
+    ->help('Mark damage on card front'),
+
+// Back image assessment
+BoundingBoxField::make('Back Damage', 'back_bounding_boxes')
+    ->image(fn() => $this->backImage?->url)
+    ->damageAssessments(fn() => $this->backDamageAssessments)
+    ->readonly(false)
+    ->help('Mark damage on card back'),
+```
+
+### Addressed Mode Toggle
+
+Show only addressed vs all damage:
+
+```php
+// Show all damage (default)
+BoundingBoxField::make('All Damage', 'all_damage')
+    ->image(fn() => $this->image_url)
+    ->damageAssessments(fn() => $this->damageAssessments)
+    ->addressedMode(false),
+
+// Show only addressed damage
+BoundingBoxField::make('Addressed Damage', 'addressed_damage')
+    ->image(fn() => $this->image_url)
+    ->damageAssessments(fn() => $this->addressedDamageAssessments)
+    ->addressedMode(true),
+```
+
+## MediaLibrary Field Usage
+
+Complete documentation for the MediaLibrary field functionality.
+
+### Basic Upload
+
+```php
+Medialibrary::make('Media', 'collection-name')
+    ->multiple()
+    ->croppable();
+```
+
+### Custom Fields
+
+Define custom fields for media metadata:
 
 ```php
 Medialibrary::make('Media')->fields(function () {
@@ -102,267 +207,488 @@ Medialibrary::make('Media')->fields(function () {
     ];
 });
 ```
-#### ResolveMediaUsing
+
+### Attach Existing Media
+
+Allow selecting from existing media:
 
 ```php
-Medialibrary::make('Media')->resolveMediaUsing(function (HasMedia $model, string $collectionName) {
-    return $model->getMedia($collectionName);
-});
-```
+// Display all media
+Medialibrary::make('Media')->attachExisting();
 
-#### AttachUsing
+// Display specific collection
+Medialibrary::make('Media')->attachExisting('collectionName');
 
-Called inside [AttachController](src/Http/Controllers/AttachController.php#L32). [AttachCallback](src/Fields/Support/AttachCallback.php) is used by default.
-It accepts `$fieldUuid` which is used when a resource is not created.
-If you want to attach media on the create view, you should keep [these lines](src/Fields/Support/AttachCallback.php#L20-L22) in your callback.
-
-```php
-Medialibrary::make('Media')
-    ->attachUsing(function (HasMedia $model, UploadedFile $file, string $collectionName, string $diskName, string $fieldUuid) {
-        if ($model instanceof TransientModel) {
-            $collectionName = $fieldUuid;
-        }
-
-        $fileAdder = $model->addMedia($file);
-
-        // do something
-
-        $fileAdder->toMediaCollection($collectionName, $diskName);
-    });
-```
-
-#### AttachExisting
-
-Allow attaching existing media.
-
-```php
-Medialibrary::make('Media')->attachExisting(); // display all media
-Medialibrary::make('Media')->attachExisting('collectionName'); // display media from a specific collection
+// Custom query
 Medialibrary::make('Media')->attachExisting(function (Builder $query, Request $request, HasMedia $model) {
-    $query->where(...);
+    $query->where('created_at', '>', now()->subDays(30));
 });
 ```
 
-#### MediaOnIndex
+### Cropping Configuration
 
-Display media on index
-
-```php
-Medialibrary::make('Media')->mediaOnIndex(1);
-Medialibrary::make('Media')->mediaOnIndex(function (HasMedia $resource, string $collectionName) {
-    return $resource->media()->where('collection_name', $collectionName)->limit(5)->get();
-});
-```
-
-#### DownloadUsing
-
-```php
-Medialibrary::make('Media')->downloadUsing('conversionName');
-Medialibrary::make('Media')->downloadUsing(function (Media $media) {
-    return $media->getFullUrl();
-});
-```
-
-#### PreviewUsing
-
-```php
-Medialibrary::make('Media')->previewUsing('conversionName');
-Medialibrary::make('Media')->previewUsing(function (Media $media) {
-    return $media->getFullUrl('preview');
-});
-```
-
-#### Tooltip
-
-```php
-Medialibrary::make('Media')->tooltip('file_name');
-Medialibrary::make('Media')->tooltip(function (Media $media) {
-    return $media->getCustomProperty('tooltip');
-});
-```
-
-#### Title
-
-```php
-Medialibrary::make('Media')->title('name');
-Medialibrary::make('Media')->title(function (Media $media) {
-    return $media->name;
-});
-```
-
-#### CopyAs
-
-```php
-Medialibrary::make('Media')->copyAs('Url', function (Media $media) {
-    return $media->getFullUrl();
-});
-
-Medialibrary::make('Media')->copyAs('Html', function (Media $media) {
-    return $media->img();
-}, 'custom-icon');
-
-// You can hide default "Copy Url"
-Medialibrary::make('Media')->hideCopyUrlAction();
-```
-
-#### Croppable
-
-https://github.com/fengyuanchen/cropperjs#options
-
-```php
-Medialibrary::make('Media')->croppable('conversionName');
-Medialibrary::make('Media')->croppable('conversionName', ['viewMode' => 3]);
-Medialibrary::make('Media')->croppable('conversionName', [
-    'rotatable' => false,
-    'zoomable' => false,
-    'cropBoxResizable' => false,
-]);
-Medialibrary::make('Media')->croppable('conversionName', function (Media $media) {
-    return $media->getCustomProperty('croppable') ? ['viewMode' => 3] : null;
-});
-```
-https://docs.spatie.be/laravel-medialibrary/v8/converting-images/defining-conversions/#performing-conversions-on-specific-collections
-> {note} If your media in different collection, make sure pass your collectionName to `performOnCollections`
-
-```php
-$this->addMediaConversion('conversionName')->performOnCollections('collectionName')
-```
-
-#### Single
-
-https://docs.spatie.be/laravel-medialibrary/v7/working-with-media-collections/defining-media-collections/#single-file-collections
-
-```php
-Medialibrary::make('Media')->single();
-```
-
-#### Accept
-
-```php
-Medialibrary::make('Media')->accept('image/*');
-```
-
-#### MaxSizeInBytes
-
-```php
-Medialibrary::make('Media')->maxSizeInBytes(1024 * 1024);
-```
-
-#### AttachOnDetails
-
-Allows attaching files on the details view.
-
-```php
-Medialibrary::make('Media')->attachOnDetails();
-```
-
-#### AttachRules
-
-```php
-Medialibrary::make('Media')->attachRules('image', 'dimensions:min_width=500,min_height=500');
-```
-
-#### Autouploading
-
-```php
-Medialibrary::make('Media')->autouploading();
-```
-
-#### Preview Customization
-
-```php
-Medialibrary::make('Media')->withMeta([
-    'indexPreviewClassList' => 'rounded w-8 h-8 ml-2',
-    'detailsPreviewClassList' => 'w-32 h-24 rounded-b',
-]);
-```
-
-### Validation
+Configure image cropping with Cropper.js options:
 
 ```php
 Medialibrary::make('Media')
-    ->rules('array', 'required') // applied to the media collection
-    ->creationRules('min:2') // applied to the media collection
-    ->updateRules('max:4') // applied to the media collection
-    ->attachRules('image', 'dimensions:min_width=500,min_height=500'); // applied to media
+    ->croppable('conversionName', [
+        'viewMode' => 3,
+        'rotatable' => false,
+        'zoomable' => true,
+        'cropBoxResizable' => true,
+    ]);
 ```
 
-### Sorting
+### Validation Rules
 
 ```php
-Medialibrary::make('Media')->sortable();
+Medialibrary::make('Media')
+    ->rules('array', 'required')  // Collection rules
+    ->creationRules('min:2')      // Creation-only rules
+    ->updateRules('max:4')        // Update-only rules
+    ->attachRules('image', 'dimensions:min_width=500,min_height=500'); // File rules
 ```
 
-### Authorization Gates 'view', 'update' and 'delete'
+## API Reference
 
-To view, update and delete uploaded media, you need to setup some gates.
-You can use the store and replace callbacks to store additional information to the custom_properties.
-The additional information can be used inside the gates for authorization.
+### BoundingBoxField Methods
+
+#### `image($url)`
+Set the image URL to annotate. Accepts string or closure.
+
+**Parameters:**
+- `$url` (string|Closure): Image URL or closure returning URL
+
+**Example:**
+```php
+->image('https://example.com/image.jpg')
+->image(fn() => $this->resource->image_url)
+```
+
+#### `damageAssessments($assessments)`
+Load existing damage assessment models for display.
+
+**Parameters:**
+- `$assessments` (Collection|Closure): Assessment models or closure
+
+**Example:**
+```php
+->damageAssessments($this->damageAssessments)
+->damageAssessments(fn() => $this->resource->assessments()->where('addressed', false)->get())
+```
+
+#### `readonly($readonly = true)`
+Enable/disable editing mode.
+
+**Parameters:**
+- `$readonly` (bool): True for display-only, false for editing
+
+**Example:**
+```php
+->readonly(true)   // Display only
+->readonly(false)  // Allow drawing
+```
+
+#### `addressedMode($enabled = true)`
+Toggle between all damage and addressed-only views.
+
+**Parameters:**
+- `$enabled` (bool): True for addressed-only, false for all
+
+**Example:**
+```php
+->addressedMode(true)   // Show only addressed
+->addressedMode(false)  // Show all damage
+```
+
+#### `preserveOriginalProportions($preserve = true)`
+Maintain original image aspect ratio.
+
+**Parameters:**
+- `$preserve` (bool): True to maintain aspect ratio
+
+**Example:**
+```php
+->preserveOriginalProportions(true)   // Keep aspect ratio
+->preserveOriginalProportions(false)  // Allow stretching
+```
+
+### Medialibrary Field Methods
+
+For complete MediaLibrary field documentation, see:
+- Original package: [dmitrybubyakin/nova-medialibrary-field](https://github.com/dmitrybubyakin/nova-medialibrary-field)
+- Spatie docs: [Laravel MediaLibrary](https://spatie.be/docs/laravel-medialibrary)
+
+Key methods include:
+- `conversionOnView()`, `conversionOnIndexView()`, `conversionOnForm()`
+- `croppable()`, `single()`, `multiple()`
+- `attachExisting()`, `attachOnDetails()`, `autouploading()`
+- `downloadUsing()`, `previewUsing()`, `tooltip()`, `title()`
+
+## Data Structure
+
+### Bounding Box JSON Format
+
+Bounding boxes are stored as JSON arrays in your model:
+
+```json
+[
+  {
+    "id": "uuid-1234-5678-90ab",
+    "x": 100,
+    "y": 150,
+    "width": 200,
+    "height": 100,
+    "image_width": 1000,
+    "image_height": 1400,
+    "rotation": 0,
+    "damageType": "scratch",
+    "severity": "moderate",
+    "notes": "Deep scratch on right edge"
+  },
+  {
+    "id": "uuid-abcd-efgh-ijkl",
+    "x": 300,
+    "y": 400,
+    "width": 150,
+    "height": 80,
+    "image_width": 1000,
+    "image_height": 1400,
+    "rotation": 0,
+    "damageType": "dent",
+    "severity": "severe",
+    "notes": "Corner dent affecting artwork"
+  }
+]
+```
+
+### Field Properties
+
+| Property | Type | Required | Description |
+|----------|------|----------|-------------|
+| `id` | string | Yes | Unique identifier (UUID) |
+| `x` | number | Yes | X coordinate (pixels) |
+| `y` | number | Yes | Y coordinate (pixels) |
+| `width` | number | Yes | Box width (pixels) |
+| `height` | number | Yes | Box height (pixels) |
+| `image_width` | number | Yes | Original image width |
+| `image_height` | number | Yes | Original image height |
+| `rotation` | number | No | Rotation angle (default: 0) |
+| `damageType` | string | No | Type of damage |
+| `severity` | string | No | Severity level |
+| `notes` | string | No | Additional notes |
+
+### Damage Types
+
+15 predefined damage types with color coding:
+
+| Type | Icon | Color | Description |
+|------|------|-------|-------------|
+| `scratch` | 🔪 | Red (#EF4444) | Surface scratches |
+| `dent` | 🔨 | Indigo (#6366F1) | Physical dents |
+| `crease` | 📏 | Amber (#F59E0B) | Fold lines |
+| `stain` | 🧽 | Purple (#A855F7) | Discoloration |
+| `tear` | 📄 | Dark Red (#DC2626) | Rips and tears |
+| `bend` | ↪️ | Green (#10B981) | Bent corners/edges |
+| `edge_wear` | 🔲 | Blue (#3B82F6) | Edge deterioration |
+| `corner_damage` | 📐 | Pink (#EC4899) | Corner wear |
+| `water_damage` | 🌊 | Cyan (#06B6D4) | Water stains |
+| `sun_damage` | ☀️ | Yellow (#FBBF24) | Light fading |
+| `discoloration` | 🎨 | Lime (#84CC16) | Color changes |
+| `whitening` | ⚪ | Gray (#9CA3AF) | White spots |
+| `print_defect` | 🖨️ | Violet (#8B5CF6) | Manufacturing defects |
+| `surface_damage` | 💥 | Orange (#F97316) | General surface issues |
+| `other` | ❓ | Slate (#64748B) | Uncategorized |
+
+### Severity Levels
+
+| Severity | Color | Weight | Description |
+|----------|-------|--------|-------------|
+| `minor` | Green (#22C55E) | 1 | Minimal impact |
+| `moderate` | Yellow (#EAB308) | 2 | Noticeable damage |
+| `severe` | Red (#EF4444) | 3 | Significant damage |
+
+## Model Setup
+
+### Database Migration
 
 ```php
-Gate::define('view', function ($user, $media) {
-    return true; // view granted
-});
-
-Gate::define('update', function ($user, $media) {
-    return true; // update granted
-});
-
-Gate::define('delete', function ($user, $media) {
-    return true; // deletion granted
+Schema::create('damage_assessments', function (Blueprint $table) {
+    $table->id();
+    $table->foreignId('submission_trading_card_id')->constrained();
+    $table->foreignId('submission_image_id')->nullable()->constrained();
+    $table->string('damage_type');
+    $table->string('severity')->default('moderate');
+    $table->json('bounding_boxes')->nullable();
+    $table->text('notes')->nullable();
+    $table->boolean('addressed')->default(false);
+    $table->timestamps();
 });
 ```
 
-You can also use the policy.
+### Model Configuration
 
 ```php
-class MediaPolicy
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+
+class TradingCard extends Model implements HasMedia
 {
-    public function view(User $user, Media $media): bool
-    {
-        return true;
-    }
+    use InteractsWithMedia;
 
-    public function update(User $user, Media $media): bool
-    {
-        return true;
-    }
-
-    public function delete(User $user, Media $media): bool
-    {
-        return true;
-    }
-}
-
-class AuthServiceProvider extends ServiceProvider
-{
-    protected $policies = [
-        Media::class => MediaPolicy::class,
+    protected $casts = [
+        'bounding_boxes' => 'array',
     ];
 
-    //...
+    protected $fillable = [
+        'name',
+        'bounding_boxes',
+    ];
+
+    public function damageAssessments()
+    {
+        return $this->hasMany(DamageAssessment::class);
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('card-images')
+            ->registerMediaConversions(function () {
+                $this->addMediaConversion('thumb')
+                    ->width(300)
+                    ->height(300);
+
+                $this->addMediaConversion('large')
+                    ->width(1600)
+                    ->height(1200);
+            });
+    }
 }
 ```
 
-## Translations
+### Complete Nova Resource Example
 
- - [de](resources/lang/de.json)
- - [en](resources/lang/en.json)
- - [fr](resources/lang/fr.json)
- - [pt-BR](resources/lang/pt-BR.json)
- - [ru](resources/lang/ru.json)
- - [tr](resources/lang/tr.json)
- - [uk](resources/lang/uk.json)
- - [zh-CN](resources/lang/zh-CN.json)
+```php
+<?php
 
-## Changelog
+namespace App\Nova;
 
-Please see the [CHANGELOG](CHANGELOG.md) for more information about the most recent changed.
+use Laravel\Nova\Resource;
+use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
+use DmitryBubyakin\NovaMedialibraryField\Fields\BoundingBoxField;
 
-## Alternatives
+class TradingCard extends Resource
+{
+    public function fields(NovaRequest $request)
+    {
+        return [
+            ID::make()->sortable(),
 
- - https://github.com/ebess/advanced-nova-media-library
+            Text::make('Card Name', 'name')->required(),
+
+            // Image upload with MediaLibrary
+            Medialibrary::make('Card Images', 'card-images')
+                ->conversionOnView('large')
+                ->conversionOnIndexView('thumb')
+                ->multiple()
+                ->croppable()
+                ->help('Upload card images for assessment'),
+
+            // Interactive damage assessment with BoundingBoxField
+            BoundingBoxField::make('Damage Assessment', 'bounding_boxes')
+                ->image(function () {
+                    $latestImage = $this->getFirstMedia('card-images');
+                    return $latestImage ? $latestImage->getUrl('large') : null;
+                })
+                ->damageAssessments(fn() => $this->damageAssessments)
+                ->readonly(false)
+                ->help('Mark damage areas on the card image')
+                ->hideFromIndex(),
+
+            // Read-only damage overview on detail view
+            BoundingBoxField::make('Damage Overview', 'damage_summary')
+                ->image(fn() => $this->getFirstMedia('card-images')?->getUrl('large'))
+                ->damageAssessments(fn() => $this->damageAssessments)
+                ->readonly(true)
+                ->onlyOnDetail(),
+        ];
+    }
+}
+```
+
+## Development
+
+### Package Structure
+
+```
+packages/nova-medialibrary-bounding-box-field/
+├── src/
+│   ├── Fields/
+│   │   ├── Medialibrary.php         # Standard media field
+│   │   └── BoundingBoxField.php      # Bounding box field
+│   ├── Resources/
+│   │   └── Media.php
+│   └── FieldServiceProvider.php
+├── resources/
+│   ├── js/
+│   │   ├── components/
+│   │   │   ├── Medialibrary/        # Media management components
+│   │   │   └── BoundingBox/         # Bounding box editor components
+│   │   └── field.js                 # Component registration
+│   └── sass/
+│       └── field.scss
+├── dist/                            # Compiled assets
+│   ├── js/field.js
+│   ├── css/field.css
+│   └── mix-manifest.json
+├── composer.json
+├── package.json
+├── webpack.mix.js
+└── README.md
+```
+
+### Building Assets
+
+```bash
+cd packages/nova-medialibrary-bounding-box-field
+
+# Install dependencies
+npm install
+
+# Development build (with source maps)
+npm run dev
+
+# Production build (minified)
+npm run prod
+
+# Watch for changes
+npm run watch
+```
+
+### Testing Changes
+
+After making code changes:
+
+```bash
+# Rebuild package assets
+cd packages/nova-medialibrary-bounding-box-field
+npm run prod
+
+# Clear Laravel caches
+cd ../..
+php artisan cache:clear
+php artisan config:clear
+php artisan view:clear
+
+# Rebuild application assets
+npm run dev
+```
+
+## Troubleshooting
+
+### Assets Not Loading
+
+**Problem**: Bounding box components not rendering
+
+**Solution**:
+```bash
+# Clear Nova cache
+php artisan nova:clear-cache
+
+# Rebuild assets
+cd packages/nova-medialibrary-bounding-box-field
+npm run prod
+
+# Clear application cache
+php artisan cache:clear
+```
+
+### Bounding Boxes Not Saving
+
+**Problem**: Data not persisting to database
+
+**Solution**: Ensure model casts attribute as array:
+```php
+protected $casts = [
+    'bounding_boxes' => 'array',
+];
+```
+
+### Image Not Displaying
+
+**Problem**: Image URL returns 404
+
+**Solution**: Verify image URL is publicly accessible:
+```php
+// Debug image URL
+dd($this->submissionImage?->file_url);
+
+// Check media conversions
+dd($this->getFirstMedia('collection-name')?->getUrl('conversion-name'));
+```
+
+### Component Not Registered
+
+**Problem**: Vue component not found errors
+
+**Solution**: Check service provider is loaded:
+```bash
+php artisan config:cache
+php artisan route:list | grep nova-vendor/pcrcard
+```
+
+### Webpack Build Errors
+
+**Problem**: `Cannot find module 'laravel-nova-devtool'`
+
+**Solution**: Package already configured for Nova 5.x with externals. If errors persist:
+```bash
+# Remove node_modules and reinstall
+rm -rf node_modules package-lock.json
+npm install
+npm run prod
+```
+
+## Credits
+
+- **Original Package**: [dmitrybubyakin/nova-medialibrary-field](https://github.com/dmitrybubyakin/nova-medialibrary-field)
+- **Spatie MediaLibrary**: [spatie/laravel-medialibrary](https://github.com/spatie/laravel-medialibrary)
+- **PCR Card Enhancements**: BoundingBoxField for visual damage assessment
 
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+
+## Changelog
+
+### v2.0.0 - October 2025
+- ✨ **NEW**: Added `BoundingBoxField` for interactive visual annotation
+- ✨ **NEW**: 15 damage types with color coding and icons
+- ✨ **NEW**: 3 severity levels for damage classification
+- ✨ **NEW**: Canvas-based drawing interface with multi-box support
+- ✨ **NEW**: Read-only and addressed mode toggles
+- ✨ **NEW**: Comprehensive API and usage documentation
+- 🔧 Updated for Laravel Nova 5.x compatibility
+- 🔧 Removed Nova 4.x devtool dependency
+- 🔧 Configured webpack externals for Nova dependencies
+- 🐛 Fixed cropperjs CSS import issue
+
+### v1.0.0 - Original Release
+- 📦 MediaLibrary field functionality
+- 🖼️ Image upload, cropping, and management
+- 🎨 Multiple file support with conversions
+
+## Support
+
+For issues related to:
+- **MediaLibrary functionality**: See [original package documentation](https://github.com/dmitrybubyakin/nova-medialibrary-field)
+- **BoundingBox functionality**: Contact PCR Card development team
+- **Spatie MediaLibrary**: See [Spatie documentation](https://spatie.be/docs/laravel-medialibrary)

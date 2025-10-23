@@ -1,17 +1,24 @@
 {
-    "name": "dmitrybubyakin/nova-medialibrary-field",
-    "description": "Laravel Nova field for managing the Spatie media library.",
+    "name": "pcrcard/nova-medialibrary-bounding-box-field",
+    "description": "Laravel Nova field for Spatie MediaLibrary with bounding box editor for visual damage assessment",
     "keywords": [
         "laravel",
         "nova",
-        "medialibrary"
+        "medialibrary",
+        "bounding-box",
+        "damage-assessment",
+        "image-annotation"
     ],
-    "homepage": "https://github.com/dmitrybubyakin/nova-medialibrary-field",
+    "homepage": "https://github.com/hackur/nova-medialibrary-bounding-box-field",
     "license": "MIT",
     "authors": [
         {
             "name": "Dmitry Bubyakin",
             "email": "dimabubyakin97@gmail.com"
+        },
+        {
+            "name": "PCR Card Development Team",
+            "email": "dev@pcrcard.com"
         }
     ],
     "repositories": [
