@@ -11,9 +11,9 @@ mix
       'laravel-nova': 'LaravelNova',
       'laravel-nova-ui': 'LaravelNovaUi',
       clipboard: 'Clipboard',
-      vuedraggable: 'vuedraggable',
-      'vue-cropperjs': 'VueCropperjs',
-      cropperjs: 'Cropper',
+      // vuedraggable: removed from externals - now bundled with the package
+      // vue-cropperjs: removed from externals - now bundled with the package
+      // cropperjs: removed from externals - now bundled with the package
     },
     output: {
       uniqueName: 'pcrcard/nova-medialibrary-bounding-box-field',

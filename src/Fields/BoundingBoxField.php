@@ -94,11 +94,14 @@ class BoundingBoxField extends Field
     /**
      * Set whether the field is readonly
      *
-     * @param  bool  $readonly
+     * @param  callable|bool  $callback
      * @return $this
      */
-    public function readonly(bool $readonly = true): self
+    public function readonly(callable|bool $callback = true): self
     {
+        // If it's a callable, resolve it, otherwise use the boolean value directly
+        $readonly = is_callable($callback) ? $callback($this) : $callback;
+
         return $this->withMeta(['readonly' => $readonly]);
     }
 
