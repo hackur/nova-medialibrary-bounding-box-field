@@ -36,8 +36,7 @@ class MediaListAction
         Medialibrary $field,
         HasMedia $resourceModel,
         string $collectionName,
-    ): MediaCollection
-    {
+    ): MediaCollection {
         return call_user_func(
             $field->resolveMediaUsingCallback,
             $resourceModel,

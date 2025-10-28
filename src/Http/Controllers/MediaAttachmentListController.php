@@ -13,8 +13,7 @@ class MediaAttachmentListController
     public function __invoke(
         MediaAttachmentListRequest $request,
         MediaAttachmentListAction $action,
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $media = $action->handle($request->getData());
 
         return response()->json($media);

@@ -12,6 +12,7 @@ class IndexControllerTest extends TestCase
 {
     /**
      * @test
+     *
      * @dataProvider dataProvider
      */
     public function test_can_retrieve_media(string $field, int $count, array $media): void

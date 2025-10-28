@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DmitryBubyakin\NovaMedialibraryField\Tests\Integration;
 
@@ -6,7 +8,7 @@ use DmitryBubyakin\NovaMedialibraryField\Tests\TestCase;
 
 class UpdateControllerTest extends TestCase
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

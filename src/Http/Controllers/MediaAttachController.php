@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DmitryBubyakin\NovaMedialibraryField\Http\Controllers;
 
@@ -11,8 +13,7 @@ class MediaAttachController
     public function __invoke(
         MediaAttachRequest $request,
         MediaAttachAction $action,
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $action->handle($request->getData());
 
         return response()->json(status: 201);

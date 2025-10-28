@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+
 use function DmitryBubyakin\NovaMedialibraryField\call_or_default;
 
 class MediaAttachmentListAction
@@ -53,12 +54,12 @@ class MediaAttachmentListAction
         $callback = function (Builder $builder) use ($name): Builder {
             return $builder->where(function (Builder $builder) use ($name): Builder {
                 return $builder
-                    ->where('name', 'like', '%' . $name . '%')
-                    ->orWhere('file_name', 'like', '%' . $name . '%');
+                    ->where('name', 'like', '%'.$name.'%')
+                    ->orWhere('file_name', 'like', '%'.$name.'%');
             });
         };
 
-        return $builder->when(!empty($name), $callback);
+        return $builder->when(! empty($name), $callback);
     }
 
     private function applyMaxSizeFilter(Builder $builder, ?int $maxSize): Builder
@@ -67,7 +68,7 @@ class MediaAttachmentListAction
             return $builder->where('size', '<=', $maxSize);
         };
 
-        return $builder->when(!empty($maxSize), $callback);
+        return $builder->when(! empty($maxSize), $callback);
     }
 
     private function applyMimeTypeFilter(Builder $builder, ?string $mimeType): Builder
@@ -84,6 +85,6 @@ class MediaAttachmentListAction
             return $builder->where('mime_type', 'like', $mimeType);
         };
 
-        return $builder->when(!empty($mimeType), $callback);
+        return $builder->when(! empty($mimeType), $callback);
     }
 }

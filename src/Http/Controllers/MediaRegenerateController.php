@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DmitryBubyakin\NovaMedialibraryField\Http\Controllers;
 
@@ -11,8 +13,7 @@ class MediaRegenerateController
     public function __invoke(
         Request $request,
         MediaRegenerateAction $action,
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $action
             ->handle(
                 (int) $request->route('media'),

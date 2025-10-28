@@ -14,6 +14,5 @@ class MediaCropData extends Data
         public int $cropX,
         public int $cropY,
         public int $rotate,
-    ) {
-    }
+    ) {}
 }

@@ -18,14 +18,13 @@ use Laravel\Nova\NovaServiceProvider;
 use Mockery;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Spatie\LaravelData\LaravelDataServiceProvider;
-use Spatie\LaravelData\Support\DataConfig;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\MediaLibrary\MediaLibraryServiceProvider;
 
 abstract class TestCase extends Orchestra
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -68,15 +67,15 @@ abstract class TestCase extends Orchestra
 
         if (class_exists(\CreateMediaTable::class)) {
             // PHP 7 only
-            (new \CreateMediaTable())->up();
+            (new \CreateMediaTable)->up();
         } else {
             // PHP 8+ version of medialibrary uses anonymous class, so we can require and call it
             $mediaTableMigration = require __DIR__.'/../vendor/spatie/laravel-medialibrary/database/migrations/create_media_table.php.stub';
             $mediaTableMigration->up();
         }
 
-        (new \CreateActionEventsTable())->up();
-        (new \AddFieldsToActionEventsTable())->up();
+        (new \CreateActionEventsTable)->up();
+        (new \AddFieldsToActionEventsTable)->up();
     }
 
     protected function setUpNova($app): void

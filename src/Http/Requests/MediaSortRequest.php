@@ -19,7 +19,7 @@ class MediaSortRequest extends FormRequest
             'media.*' => [
                 'required',
                 'integer',
-                'exists:' . config('media-library.media_model') . ',id',
+                'exists:'.config('media-library.media_model').',id',
             ],
         ];
     }

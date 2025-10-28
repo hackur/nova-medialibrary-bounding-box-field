@@ -16,6 +16,5 @@ class MediaAttachData extends Data
         public bool $resourceExists,
         public string $resource,
         public UploadedFile $file,
-    ) {
-    }
+    ) {}
 }

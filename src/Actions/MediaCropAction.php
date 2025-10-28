@@ -31,7 +31,7 @@ class MediaCropAction
         $media->manipulations = [
             $data->conversion => [
                 'manualCrop' => $this->getManualCrop($data),
-                //'orientation' => $this->getOrientation($data),
+                // 'orientation' => $this->getOrientation($data),
             ],
         ];
 

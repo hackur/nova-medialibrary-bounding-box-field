@@ -21,6 +21,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Whitecube\NovaFlexibleContent\Flexible;
 use Whitecube\NovaFlexibleContent\Layouts\Layout;
+
 use function DmitryBubyakin\NovaMedialibraryField\callable_or_default;
 
 /**
@@ -71,8 +72,7 @@ class Medialibrary extends Field
         string $collectionName = '',
         string $diskName = '',
         ?string $attribute = null,
-    )
-    {
+    ) {
         parent::__construct($name, $attribute);
 
         $this->collectionName = $collectionName;
@@ -108,7 +108,7 @@ class Medialibrary extends Field
         return $this;
     }
 
-    public function attachExisting(string | callable | null $callback = null): self
+    public function attachExisting(string|callable|null $callback = null): self
     {
         $defaultCallback = function (Builder $query) use ($callback): void {
             if ($callback) {
@@ -128,7 +128,7 @@ class Medialibrary extends Field
         return $this;
     }
 
-    public function mediaOnIndex(int | callable $mediaOnIndex): self
+    public function mediaOnIndex(int|callable $mediaOnIndex): self
     {
         $defaultCallback = function (HasMedia $resource, string $collectionName) use ($mediaOnIndex): Collection {
             return $resource
@@ -144,7 +144,7 @@ class Medialibrary extends Field
         return $this;
     }
 
-    public function downloadUsing(string | callable $downloadUsing): self
+    public function downloadUsing(string|callable $downloadUsing): self
     {
         $defaultCallback = function (Media $media) use ($downloadUsing): ?string {
             return $media->getFullUrl($downloadUsing);
@@ -155,7 +155,7 @@ class Medialibrary extends Field
         return $this;
     }
 
-    public function previewUsing(string | callable $previewUsing): self
+    public function previewUsing(string|callable $previewUsing): self
     {
         $defaultCallback = function (Media $media) use ($previewUsing): ?string {
             return $media->getFullUrl($previewUsing);
@@ -173,7 +173,7 @@ class Medialibrary extends Field
         return $this;
     }
 
-    public function tooltip(string | callable $tooltip): self
+    public function tooltip(string|callable $tooltip): self
     {
         $defaultCallback = function (Media $media) use ($tooltip): ?string {
             return $media->{$tooltip};
@@ -184,7 +184,7 @@ class Medialibrary extends Field
         return $this;
     }
 
-    public function title(string | callable $title): self
+    public function title(string|callable $title): self
     {
         $defaultCallback = function (Media $media) use ($title): ?string {
             return $media->{$title};
@@ -195,7 +195,7 @@ class Medialibrary extends Field
         return $this;
     }
 
-    public function copyAs(string $as, string | callable $value, string $icon = 'link'): self
+    public function copyAs(string $as, string|callable $value, string $icon = 'link'): self
     {
         $defaultCallback = function (Media $media) use ($value): ?string {
             return $media->{$value};
@@ -215,7 +215,7 @@ class Medialibrary extends Field
         return $this->withMeta(['hideCopyUrlAction' => true]);
     }
 
-    public function croppable(string $conversion, array | callable |null $options = null): self
+    public function croppable(string $conversion, array|callable|null $options = null): self
     {
         $this->cropperConversion = $conversion;
 
@@ -266,7 +266,7 @@ class Medialibrary extends Field
         return $this->withMeta(['autouploading' => true]);
     }
 
-    public function attachRules(ValidationRule | string | array $rules): self
+    public function attachRules(ValidationRule|string|array $rules): self
     {
         $this->attachRules = ($rules instanceof ValidationRule || is_string($rules)) ? func_get_args() : $rules;
 

@@ -8,6 +8,5 @@ class MediaSortData extends Data
 {
     public function __construct(
         public array $ids,
-    ) {
-    }
+    ) {}
 }

@@ -10,11 +10,10 @@ use DmitryBubyakin\NovaMedialibraryField\MedialibraryFieldResolver;
 use DmitryBubyakin\NovaMedialibraryField\Tests\Fixtures\Nova\ContainerField;
 use DmitryBubyakin\NovaMedialibraryField\Tests\TestCase;
 use Laravel\Nova\Fields\FieldCollection;
-use TypeError;
 
 class MedialibraryRequestTest extends TestCase
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 

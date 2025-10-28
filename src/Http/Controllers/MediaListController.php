@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DmitryBubyakin\NovaMedialibraryField\Http\Controllers;
 
@@ -11,8 +13,7 @@ class MediaListController
     public function __invoke(
         MediaListRequest $request,
         MediaListAction $action,
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $media = $action->handle($request->getData());
 
         return response()->json($media);

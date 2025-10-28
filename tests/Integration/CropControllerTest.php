@@ -10,14 +10,14 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class CropControllerTest extends TestCase
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
         TestPost::$withConversions = true;
     }
 
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         TestPost::$withConversions = false;
 

@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DmitryBubyakin\NovaMedialibraryField\Fields\Support;
 
@@ -8,6 +10,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+
 use function DmitryBubyakin\NovaMedialibraryField\call_or_default;
 
 class MediaPresenter implements Arrayable
@@ -51,7 +54,7 @@ class MediaPresenter implements Arrayable
 
         $appendTimestampCallback = function (string $url): string {
             if ($this->field->appendTimestampToPreview) {
-                return $url . '?timestamp=' . $this->media->updated_at->getTimestamp();
+                return $url.'?timestamp='.$this->media->updated_at->getTimestamp();
             }
 
             return $url;
@@ -87,7 +90,7 @@ class MediaPresenter implements Arrayable
 
     public function authorizedTo(string $ability): bool
     {
-        return !Gate::getPolicyFor($this->media) or Gate::check($ability, $this->media);
+        return ! Gate::getPolicyFor($this->media) or Gate::check($ability, $this->media);
     }
 
     public function toArray(): array

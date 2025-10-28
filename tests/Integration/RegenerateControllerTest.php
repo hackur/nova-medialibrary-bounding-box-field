@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\File;
 
 class RegenerateControllerTest extends TestCase
 {
-    public function tearDown(): void
+    protected function tearDown(): void
     {
         TestPost::$withConversions = false;
 

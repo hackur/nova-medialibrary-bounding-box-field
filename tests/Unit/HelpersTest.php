@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace DmitryBubyakin\NovaMedialibraryField\Tests\Unit;
 
+use PHPUnit\Framework\TestCase;
+
 use function DmitryBubyakin\NovaMedialibraryField\call_or_default;
 use function DmitryBubyakin\NovaMedialibraryField\callable_or_default;
-use function DmitryBubyakin\NovaMedialibraryField\validate_args;
-use PHPUnit\Framework\TestCase;
 
 class HelpersTest extends TestCase
 {

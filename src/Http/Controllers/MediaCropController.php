@@ -13,8 +13,7 @@ class MediaCropController
     public function __invoke(
         MediaCropRequest $request,
         MediaCropAction $action,
-    ): JsonResponse
-    {
+    ): JsonResponse {
         $action->handle($request->getData());
 
         return response()->json();

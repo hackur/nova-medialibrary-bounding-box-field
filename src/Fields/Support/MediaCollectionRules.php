@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DmitryBubyakin\NovaMedialibraryField\Fields\Support;
 
@@ -43,7 +45,8 @@ class MediaCollectionRules
         };
 
         return [
-            new class($callback) extends ClosureValidationRule implements ImplicitRule {
+            new class($callback) extends ClosureValidationRule implements ImplicitRule
+            {
                 //
             },
         ];

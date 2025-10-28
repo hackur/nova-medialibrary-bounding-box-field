@@ -18,6 +18,5 @@ class MediaAttachmentListData extends Data
         public ?string $name = null,
         public ?int $maxSize = null,
         public ?string $mimeType = null,
-    ) {
-    }
+    ) {}
 }

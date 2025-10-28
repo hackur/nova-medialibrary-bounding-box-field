@@ -6,7 +6,6 @@ namespace DmitryBubyakin\NovaMedialibraryField\Fields\Support;
 
 use App\Nova\Resource;
 use DmitryBubyakin\NovaMedialibraryField\Fields\GeneratedConversions;
-use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Textarea;
@@ -17,7 +16,7 @@ class MediaFields
     public static function make(): callable
     {
         return function () {
-            /** @var Resource $this */
+            /** @var resource $this */
 
             /** @var Media $resource */
             $resource = $this->model();

@@ -26,7 +26,7 @@ class FieldServiceProvider extends ServiceProvider
     private function publishLang(): void
     {
         $this->publishes([
-           '/../resources/lang/' => resource_path('lang/vendor/nova-medialibrary-field'),
+            '/../resources/lang/' => resource_path('lang/vendor/nova-medialibrary-field'),
         ]);
 
         $this->loadJSONTranslationsFrom(resource_path('lang/vendor/nova-medialibrary-field'));
@@ -51,15 +51,15 @@ class FieldServiceProvider extends ServiceProvider
 
         Route::middleware(['nova'])
             ->prefix('nova-vendor/pcrcard/nova-medialibrary-bounding-box-field')
-            ->group(__DIR__ . '/../routes/api.php');
+            ->group(__DIR__.'/../routes/api.php');
     }
 
     public function translations(): void
     {
         $locale = $this->app->getLocale();
 
-        Nova::translations(__DIR__ . '/../resources/lang/' . $locale . '.json');
-        Nova::translations(resource_path('lang/vendor/nova-medialibrary-field/' . $locale . '.json'));
+        Nova::translations(__DIR__.'/../resources/lang/'.$locale.'.json');
+        Nova::translations(resource_path('lang/vendor/nova-medialibrary-field/'.$locale.'.json'));
     }
 
     public function register(): void

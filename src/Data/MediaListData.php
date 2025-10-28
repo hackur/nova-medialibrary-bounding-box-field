@@ -13,6 +13,5 @@ class MediaListData extends Data
         public ?string $fieldUuid,
         public ?HasMedia $resourceModel,
         public bool $resourceExists,
-    ) {
-    }
+    ) {}
 }

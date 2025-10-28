@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DmitryBubyakin\NovaMedialibraryField;
 
@@ -8,7 +10,6 @@ function call_or_default(?callable $callback, array $args = [], $default = null)
         ? call_user_func($callback, ...$args)
         : value($default);
 }
-
 
 function callable_or_default($callback, callable $default): callable
 {

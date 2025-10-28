@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DmitryBubyakin\NovaMedialibraryField\Models;
 
@@ -37,7 +39,8 @@ class TransientModel extends Model implements HasMedia
 
     public function newBaseQueryBuilder(): Builder
     {
-        return new class($this->getConnection()) extends Builder {
+        return new class($this->getConnection()) extends Builder
+        {
             public function get($columns = ['*']): Collection
             {
                 return collect([(object) TransientModel::instanceAttributes()]);

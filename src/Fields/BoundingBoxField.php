@@ -13,6 +13,7 @@ use Laravel\Nova\Fields\Field;
  * Supports multiple bounding boxes with damage type and severity metadata.
  *
  * @author PCR Card Development Team
+ *
  * @version 1.0.0
  */
 class BoundingBoxField extends Field
@@ -47,8 +48,6 @@ class BoundingBoxField extends Field
 
     /**
      * Whether to preserve original image proportions
-     *
-     * @var bool
      */
     protected bool $preserveOriginalProportions = true;
 
@@ -94,7 +93,6 @@ class BoundingBoxField extends Field
     /**
      * Set whether the field is readonly
      *
-     * @param  callable|bool  $callback
      * @return $this
      */
     public function readonly(callable|bool $callback = true): self
@@ -108,7 +106,6 @@ class BoundingBoxField extends Field
     /**
      * Enable "addressed" mode for marking damage as fixed
      *
-     * @param  bool  $enabled
      * @return $this
      */
     public function addressedMode(bool $enabled = true): self
@@ -119,7 +116,6 @@ class BoundingBoxField extends Field
     /**
      * Set the API endpoint for updating addressed status
      *
-     * @param  string  $endpoint
      * @return $this
      */
     public function addressedEndpoint(string $endpoint): self
@@ -131,8 +127,6 @@ class BoundingBoxField extends Field
      * Resolve the field's value for display
      *
      * @param  mixed  $resource
-     * @param  string|null  $attribute
-     * @return void
      */
     public function resolve($resource, ?string $attribute = null): void
     {
@@ -159,8 +153,6 @@ class BoundingBoxField extends Field
 
     /**
      * Resolve the image URL
-     *
-     * @return string|null
      */
     protected function resolveImageUrl(): ?string
     {
@@ -173,8 +165,6 @@ class BoundingBoxField extends Field
 
     /**
      * Resolve multiple image URLs
-     *
-     * @return array
      */
     protected function resolveImageUrls(): array
     {
@@ -187,8 +177,6 @@ class BoundingBoxField extends Field
 
     /**
      * Resolve the damage assessments value
-     *
-     * @return array
      */
     protected function resolveDamageAssessments(): array
     {
@@ -207,8 +195,6 @@ class BoundingBoxField extends Field
 
     /**
      * Get damage type options for the frontend
-     *
-     * @return array
      */
     protected function getDamageTypeOptions(): array
     {
@@ -223,8 +209,6 @@ class BoundingBoxField extends Field
 
     /**
      * Get severity level options for the frontend
-     *
-     * @return array
      */
     protected function getSeverityLevelOptions(): array
     {
@@ -239,8 +223,6 @@ class BoundingBoxField extends Field
 
     /**
      * Get damage types from application constants
-     *
-     * @return array
      */
     protected function getDamageTypesFromApp(): array
     {
@@ -261,8 +243,6 @@ class BoundingBoxField extends Field
 
     /**
      * Get severity levels from application constants
-     *
-     * @return array
      */
     protected function getSeverityLevelsFromApp(): array
     {
@@ -283,8 +263,6 @@ class BoundingBoxField extends Field
 
     /**
      * Get default damage types (fallback)
-     *
-     * @return array
      */
     protected function getDefaultDamageTypes(): array
     {
@@ -299,8 +277,6 @@ class BoundingBoxField extends Field
 
     /**
      * Get default severity levels (fallback)
-     *
-     * @return array
      */
     protected function getDefaultSeverityLevels(): array
     {
@@ -314,11 +290,9 @@ class BoundingBoxField extends Field
     /**
      * Hydrate the given attribute on the model based on the incoming request
      *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @param  string  $requestAttribute
      * @param  object  $model
      * @param  string  $attribute
-     * @return void
      */
     protected function fillAttributeFromRequest(
         \Laravel\Nova\Http\Requests\NovaRequest $request,

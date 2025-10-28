@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace DmitryBubyakin\NovaMedialibraryField;
 
@@ -27,8 +29,7 @@ class MedialibraryFieldResolver
         NovaRequest $request,
         ?Resource $resource = null,
         ?string $attribute = null,
-    )
-    {
+    ) {
         $this->request = $request;
         $this->resource = $resource ?: $request->newResource();
         $this->attribute = $attribute ?: $request->route('field');
