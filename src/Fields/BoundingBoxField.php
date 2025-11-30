@@ -313,11 +313,11 @@ class BoundingBoxField extends Field
     protected function getDefaultDamageTypes(): array
     {
         return [
-            ['value' => 'scratch', 'label' => 'Scratch', 'color' => '#EF4444', 'icon' => '🔪'],
-            ['value' => 'stain', 'label' => 'Stain', 'color' => '#A855F7', 'icon' => '🧽'],
-            ['value' => 'crease', 'label' => 'Crease', 'color' => '#F59E0B', 'icon' => '📏'],
-            ['value' => 'tear', 'label' => 'Tear', 'color' => '#DC2626', 'icon' => '📄'],
-            ['value' => 'edge_wear', 'label' => 'Edge Wear', 'color' => '#3B82F6', 'icon' => '🔲'],
+            ['value' => 'scratch', 'label' => 'Scratch', 'color' => '#EF4444', 'icon' => "\u{1F52A}"],
+            ['value' => 'stain', 'label' => 'Stain', 'color' => '#A855F7', 'icon' => "\u{1F9FD}"],
+            ['value' => 'crease', 'label' => 'Crease', 'color' => '#F59E0B', 'icon' => "\u{1F4CF}"],
+            ['value' => 'tear', 'label' => 'Tear', 'color' => '#DC2626', 'icon' => "\u{1F4C4}"],
+            ['value' => 'edge_wear', 'label' => 'Edge Wear', 'color' => '#3B82F6', 'icon' => "\u{1F532}"],
         ];
     }
 
