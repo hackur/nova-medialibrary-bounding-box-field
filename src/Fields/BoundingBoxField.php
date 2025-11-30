@@ -52,6 +52,13 @@ class BoundingBoxField extends Field
     protected bool $preserveOriginalProportions = true;
 
     /**
+     * The callback used to determine if the field is readonly.
+     *
+     * @var (callable(\Laravel\Nova\Http\Requests\NovaRequest):(bool))|bool|null
+     */
+    public $readonlyCallback = null;
+
+    /**
      * Set the image URL for the editor
      *
      * @param  string|callable  $url
@@ -93,14 +100,28 @@ class BoundingBoxField extends Field
     /**
      * Set whether the field is readonly
      *
+     * Accepts either a boolean or a callback that receives the NovaRequest.
+     * The callback is resolved during jsonSerialize() when the request is available.
+     *
      * @return $this
      */
     public function readonly(callable|bool $callback = true): self
     {
-        // If it's a callable, resolve it, otherwise use the boolean value directly
-        $readonly = is_callable($callback) ? $callback($this) : $callback;
+        $this->readonlyCallback = $callback;
 
-        return $this->withMeta(['readonly' => $readonly]);
+        return $this;
+    }
+
+    /**
+     * Determine if the field is readonly
+     */
+    public function isReadonly(\Laravel\Nova\Http\Requests\NovaRequest $request): bool
+    {
+        if (is_callable($this->readonlyCallback)) {
+            return (bool) call_user_func($this->readonlyCallback, $request);
+        }
+
+        return (bool) $this->readonlyCallback;
     }
 
     /**
@@ -141,6 +162,8 @@ class BoundingBoxField extends Field
      */
     public function jsonSerialize(): array
     {
+        $request = app(\Laravel\Nova\Http\Requests\NovaRequest::class);
+
         return array_merge(parent::jsonSerialize(), [
             'imageUrl' => $this->resolveImageUrl(),
             'imageUrls' => $this->resolveImageUrls(),
@@ -148,6 +171,7 @@ class BoundingBoxField extends Field
             'damageTypes' => $this->getDamageTypeOptions(),
             'severityLevels' => $this->getSeverityLevelOptions(),
             'preserveOriginalProportions' => $this->preserveOriginalProportions,
+            'readonly' => $this->isReadonly($request),
         ]);
     }
 
@@ -165,32 +189,54 @@ class BoundingBoxField extends Field
 
     /**
      * Resolve multiple image URLs
+     *
+     * Handles three cases:
+     * 1. Callable (closure) - invoke and convert result if needed
+     * 2. Collection - convert to array directly
+     * 3. Array - return as-is
      */
     protected function resolveImageUrls(): array
     {
-        if (is_callable($this->imageUrls)) {
-            return call_user_func($this->imageUrls) ?? [];
+        $value = $this->imageUrls;
+
+        // Case 1: Callable (closure) - invoke it to get the actual value
+        if (is_callable($value)) {
+            $value = call_user_func($value);
         }
 
-        return $this->imageUrls ?? [];
+        // Case 2: Collection (Support or Eloquent) - convert to array
+        if ($value instanceof \Illuminate\Support\Collection) {
+            return $value->toArray();
+        }
+
+        // Case 3: Already an array or null
+        return $value ?? [];
     }
 
     /**
      * Resolve the damage assessments value
+     *
+     * Handles three cases:
+     * 1. Callable (closure) - invoke and convert result if needed
+     * 2. Collection - convert to array directly
+     * 3. Array - return as-is
      */
     protected function resolveDamageAssessments(): array
     {
-        if (is_callable($this->damageAssessmentsCallback)) {
-            $result = call_user_func($this->damageAssessmentsCallback);
+        $value = $this->damageAssessmentsCallback;
 
-            if ($result instanceof \Illuminate\Support\Collection) {
-                return $result->toArray();
-            }
-
-            return $result ?? [];
+        // Case 1: Callable (closure) - invoke it to get the actual value
+        if (is_callable($value)) {
+            $value = call_user_func($value);
         }
 
-        return $this->damageAssessmentsCallback ?? [];
+        // Case 2: Collection (Support or Eloquent) - convert to array
+        if ($value instanceof \Illuminate\Support\Collection) {
+            return $value->toArray();
+        }
+
+        // Case 3: Already an array or null
+        return $value ?? [];
     }
 
     /**
